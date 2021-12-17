@@ -1,9 +1,9 @@
 # Plan
 
-- [ ] mock data (check what is returned by server)
+- [x] basic mock data (check what is returned by server)
 - [ ] create basic visual representation based on mock data
 - [ ] setting up redux store
-- [ ] fetching data
+- [ ] fetching data, add typings of client messages
 - [ ] connecting redux store and components
 - [ ] error handling
 - [ ] throttling ("Rerender throttling time is variable based on device performance.")
