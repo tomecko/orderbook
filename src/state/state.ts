@@ -8,11 +8,13 @@ export interface Orders {
 }
 
 export interface State {
+  deactivated: boolean;
   orders: Orders;
   productId: ProductId;
 }
 
 export const INITIAL_STATE: State = {
+  deactivated: false,
   orders: {
     asks: {},
     bids: {},

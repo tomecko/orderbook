@@ -1,0 +1,22 @@
+@import "../../theme.scss";
+
+.modal {
+  background: $background-color;
+  border: 1px solid $border-color;
+  text-align: center;
+  z-index: 1;
+
+  position: fixed;
+  left: 10vw;
+  top: 10vh;
+  height: 80vh;
+  width: 80vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    margin-bottom: 2rem;
+  }
+}

@@ -1,8 +1,9 @@
 import { combineEpics, ofType, StateObservable } from "redux-observable";
-import { animationFrames, Observable, of, Subject } from "rxjs";
+import { animationFrames, EMPTY, Observable, of, Subject } from "rxjs";
 import {
   buffer,
   catchError,
+  distinctUntilChanged,
   filter,
   ignoreElements,
   map,
@@ -13,11 +14,13 @@ import {
 } from "rxjs/operators";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 
-import { DeltaDTO, MessageDTO, SnapshotDTO } from "../types";
+import { isDeltaDTO, isSnapshotDTO } from "../services";
+import { MessageDTO } from "../types";
 
 import {
   Action,
   applyDeltas,
+  deactivateApp,
   setProductId,
   setSnapshot,
   subscribe,
@@ -42,14 +45,6 @@ const createSocket = (): WebSocketSubject<MessageDTO> => {
   (window as any).s = socket;
   return socket;
 };
-
-const isSnapshotDTO = (message: MessageDTO): message is SnapshotDTO =>
-  message.feed === "book_ui_1_snapshot";
-
-const isDeltaDTO = (message: MessageDTO): message is DeltaDTO =>
-  message.feed === "book_ui_1" &&
-  Array.isArray((message as any).asks) &&
-  Array.isArray((message as any).bids);
 
 const subscribeEpic = (
   action$: Observable<Action>,
@@ -80,7 +75,7 @@ const subscribeEpic = (
             map(applyDeltas)
           )
         ),
-        mergeWith(onCloseSubject.pipe(map(() => subscribe()))),
+        filter(() => document.visibilityState === "visible"), // FIXME
         mergeWith(
           socket.pipe(
             ignoreElements(),
@@ -111,4 +106,33 @@ const toggleProductIdEpic = (
     )
   );
 
-export const rootEpic = combineEpics(subscribeEpic, toggleProductIdEpic);
+const visibilityEpic = (action$: Observable<Action>): Observable<Action> =>
+  action$.pipe(
+    ofType("SUBSCRIBE"),
+    take(1),
+    switchMap(() => {
+      const visibilitySubject = new Subject<boolean>();
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+          visibilitySubject.next(document.visibilityState === "visible");
+        },
+        false
+      );
+      return visibilitySubject;
+    }),
+    distinctUntilChanged(),
+    tap((visibility) => {
+      if (!visibility) {
+        console.log("complete");
+        socket?.complete();
+      }
+    }),
+    switchMap((visibility) => (visibility ? EMPTY : of(deactivateApp())))
+  );
+
+export const rootEpic = combineEpics(
+  subscribeEpic,
+  toggleProductIdEpic,
+  visibilityEpic
+);

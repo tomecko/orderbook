@@ -9,6 +9,13 @@ export const applyDeltas = (deltas: DeltaDTO[]): ApplyDeltasAction => ({
   payload: deltas,
 });
 
+interface DeactivateAppAction {
+  type: "DEACTIVATE_APP";
+}
+export const deactivateApp = (): DeactivateAppAction => ({
+  type: "DEACTIVATE_APP",
+});
+
 interface SetProductIdAction {
   type: "SET_PRODUCT_ID";
   payload: ProductId;
@@ -43,6 +50,7 @@ export const toggleProductId = (): ToogleProductIdAction => ({
 
 export type Action =
   | ApplyDeltasAction
+  | DeactivateAppAction
   | SetProductIdAction
   | SetSnapshotAction
   | SubscribeAction

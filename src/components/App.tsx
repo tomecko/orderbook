@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 
-import { Action, subscribe } from "../state";
+import { Action, State, subscribe } from "../state";
 
 import { ActionBar } from "./ActionBar";
 import { Header } from "./Header";
 import { OrderLists } from "./OrderLists";
+import { ReconnectModal } from "./ReconnectModal";
 
 import "./App.css";
 
@@ -19,11 +20,13 @@ const useStartApp = () => {
 
 export function App() {
   useStartApp();
+  const deactivated = useSelector<State, boolean>((store) => store.deactivated);
   return (
     <>
       <Header />
       <OrderLists />
       <ActionBar />
+      {deactivated ? <ReconnectModal /> : null}
     </>
   );
 }

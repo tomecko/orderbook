@@ -9,8 +9,8 @@
 - [x] toggling product
 - [ ] error handling
 - [x] throttling ("Rerender throttling time is variable based on device performance.")
-- [ ] disconnecting when app is inactive
-- [ ] reconnecting when a user comes back
+- [x] disconnecting when app is inactive
+- [x] reconnecting when a user comes back
 - [x] red/green background
-- [ ] RWD
+- [x] RWD
 - [ ] tests

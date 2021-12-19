@@ -24,6 +24,12 @@ export const rootReducer: Reducer<State, Action> = (
         ...state,
         orders: getOrdersWithDeltasApplied(state.orders, action.payload),
       };
+    case "DEACTIVATE_APP":
+      return {
+        ...state,
+        orders: INITIAL_STATE.orders,
+        deactivated: true,
+      };
     case "SET_SNAPSHOT":
       return {
         ...state,
@@ -39,6 +45,10 @@ export const rootReducer: Reducer<State, Action> = (
       };
     }
     case "SUBSCRIBE":
+      return {
+        ...state,
+        deactivated: false,
+      };
     case "TOGGLE_PRODUCT_ID":
       return state;
     default:
