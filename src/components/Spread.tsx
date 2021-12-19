@@ -21,9 +21,13 @@ export function Spread({ className, spreadInfo }: Props) {
     return null;
   }
   return (
-    <div className={cns(className, styles.spread)}>
-      Spread: {formatPrice(spreadInfo.absolute)} (
-      {formatSpreadPercentage(spreadInfo.absolute / spreadInfo.firstAskPrice)})
-    </div>
+    <p className={cns(className, styles.spread)}>
+      Spread:
+      <span className={styles.figures}>
+        {formatPrice(spreadInfo.absolute)} (
+        {formatSpreadPercentage(spreadInfo.absolute / spreadInfo.firstAskPrice)}
+        )
+      </span>
+    </p>
   );
 }

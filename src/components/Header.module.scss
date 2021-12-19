@@ -1,5 +1,14 @@
 @import "../theme.scss";
 
+.header {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  padding: 0 1rem;
+}
+
 .heading {
   color: $primary-text-color;
+  font-size: 0.9rem;
+  font-weight: 700;
 }

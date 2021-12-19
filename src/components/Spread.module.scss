@@ -2,5 +2,13 @@
 
 .spread {
   color: $secondary-text-color;
+  font-size: 0.8rem;
+  font-weight: 700;
   text-align: center;
+
+  .figures {
+    display: inline-block;
+    font-family: monospace;
+    margin-left: 0.3rem;
+  }
 }
