@@ -34,7 +34,7 @@ export const rootReducer: Reducer<State, Action> = (
         return state;
       }
       return {
-        ...state,
+        ...INITIAL_STATE,
         productId: action.payload,
       };
     }

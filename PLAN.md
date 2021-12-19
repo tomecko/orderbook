@@ -11,7 +11,6 @@
 - [x] throttling ("Rerender throttling time is variable based on device performance.")
 - [ ] disconnecting when app is inactive
 - [ ] reconnecting when a user comes back
-- [ ] toggle feature
 - [x] red/green background
 - [ ] RWD
 - [ ] tests

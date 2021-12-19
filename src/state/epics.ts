@@ -1,15 +1,46 @@
 import { combineEpics, ofType, StateObservable } from "redux-observable";
-import { animationFrames, Observable } from "rxjs";
-import { buffer, filter, map, mergeWith, switchMap, tap } from "rxjs/operators";
+import { animationFrames, Observable, of, Subject } from "rxjs";
+import {
+  buffer,
+  catchError,
+  filter,
+  ignoreElements,
+  map,
+  mergeWith,
+  switchMap,
+  tap,
+} from "rxjs/operators";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 
 import { DeltaDTO, MessageDTO, SnapshotDTO } from "../types";
 
-import { Action, applyDeltas, setProductId, setSnapshot } from "./actions";
+import {
+  Action,
+  applyDeltas,
+  setProductId,
+  setSnapshot,
+  subscribe,
+} from "./actions";
 import { State } from "./state";
 
 const WEBSOCKET_URL = "wss://www.cryptofacilities.com/ws/v1";
 let socket: WebSocketSubject<MessageDTO> | undefined;
+let onOpenSubject = new Subject();
+let onCloseSubject = new Subject();
+
+// Inspired by https://techinscribed.com/websocket-connection-reconnection-rxjs-redux-observable/
+const createSocket = (): WebSocketSubject<MessageDTO> => {
+  console.log("createSocket");
+  onOpenSubject = new Subject();
+  onCloseSubject = new Subject();
+  socket = webSocket<MessageDTO>({
+    url: WEBSOCKET_URL,
+    openObserver: onOpenSubject,
+    closeObserver: onCloseSubject,
+  });
+  (window as any).s = socket;
+  return socket;
+};
 
 const isSnapshotDTO = (message: MessageDTO): message is SnapshotDTO =>
   message.feed === "book_ui_1_snapshot";
@@ -27,7 +58,7 @@ const subscribeEpic = (
     ofType("SUBSCRIBE", "SET_PRODUCT_ID"),
     switchMap(() => {
       socket?.complete();
-      socket = webSocket<MessageDTO>(WEBSOCKET_URL);
+      socket = createSocket();
       socket.next({
         event: "subscribe",
         feed: "book_ui_1",
@@ -46,6 +77,13 @@ const subscribeEpic = (
               console.log(x[0].product_id, Math.floor(Date.now() / 1000));
             }),
             map(applyDeltas)
+          )
+        ),
+        mergeWith(onCloseSubject.pipe(map(() => subscribe()))),
+        mergeWith(
+          socket.pipe(
+            ignoreElements(),
+            catchError(() => of(subscribe()))
           )
         )
       );

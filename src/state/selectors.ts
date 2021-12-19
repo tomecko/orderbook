@@ -12,7 +12,7 @@ export const selectLevels =
   (store: State): LevelWithTotal[] =>
     Object.values<Level>(store.orders[side])
       .sort(SORT_FN_PER_SIDE[side])
-      .slice(0, 10)
+      .slice(0, 15)
       .reduce(
         (acc, curr) => {
           const totalSize = (acc.totalSize +
