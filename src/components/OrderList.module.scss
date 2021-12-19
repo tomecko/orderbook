@@ -1,11 +1,26 @@
 @import "../theme.scss";
 
-.ordersTable {
-  border: 0;
-  width: 50%;
-  font-family: monospace;
+.orderList {
   border-collapse: collapse;
+  display: flex;
+  flex-wrap: wrap;
+  font-family: monospace;
   text-align: right;
+}
+
+.row {
+  box-sizing: border-box;
+  display: flex;
+  padding: 0.2rem 3rem;
+  width: 100%;
+}
+
+.headerRow {
+  order: 1;
+}
+
+.cell {
+  width: 33.333%;
 }
 
 .headingCell {
@@ -13,8 +28,20 @@
   text-transform: uppercase;
 }
 
-.levelRow {
-  background: #555 left 15%;
+.asksRow {
+  background: linear-gradient(
+    to right,
+    $asks-graph-color var(--stop),
+    transparent var(--stop) 100%
+  );
+}
+
+.bidsRow {
+  background: linear-gradient(
+    to left,
+    $bids-graph-color var(--stop),
+    transparent var(--stop) 100%
+  );
 }
 
 .orderValue {
@@ -27,4 +54,28 @@
 
 .bidsPrice {
   color: $bids-text-color;
+}
+
+@media (max-width: 600px), screen and (orientation: portrait) {
+  .row {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .bidsList {
+    .row {
+      flex-direction: row-reverse;
+    }
+    .headerRow {
+      display: none;
+    }
+  }
+
+  .bidsRow {
+    background: linear-gradient(
+      to right,
+      $bids-graph-color var(--stop),
+      transparent var(--stop) 100%
+    );
+  }
 }

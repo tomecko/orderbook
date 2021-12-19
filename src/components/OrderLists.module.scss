@@ -5,6 +5,10 @@
   width: 100%;
 }
 
+.orderList {
+  width: 50%;
+}
+
 .spread {
   align-items: center;
   justify-content: center;
@@ -13,4 +17,28 @@
   height: 3rem;
   position: absolute;
   width: 100%;
+}
+
+@media (max-width: 600px), screen and (orientation: portrait) {
+  .wrapper {
+    flex-direction: column;
+  }
+
+  .orderList {
+    width: 100%;
+  }
+
+  .bidsList {
+    order: 3;
+  }
+
+  .asksList {
+    flex-direction: column-reverse;
+    order: 1;
+  }
+
+  .spread {
+    order: 2;
+    position: initial;
+  }
 }

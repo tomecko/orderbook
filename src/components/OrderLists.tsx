@@ -1,3 +1,4 @@
+import cns from "classnames";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 
@@ -36,11 +37,13 @@ export function OrderLists() {
     <main className={styles.wrapper}>
       <Spread className={styles.spread} spreadInfo={spreadInfo} />
       <OrderList
+        className={cns(styles.orderList, styles.bidsList)}
         maxTotalSizeInfo={maxTotalSizeInfo}
         levels={bidsLevels}
         side="bids"
       />
       <OrderList
+        className={cns(styles.orderList, styles.asksList)}
         maxTotalSizeInfo={maxTotalSizeInfo}
         levels={asksLevels}
         side="asks"
