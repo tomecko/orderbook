@@ -1,18 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import { composeWithDevTools } from "redux-devtools-extension";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { applyMiddleware, createStore } from "redux";
+import { createEpicMiddleware } from "redux-observable";
 
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { App } from "./components/App";
+import { rootEpic, rootReducer } from "./state";
+
+import "./index.module.scss";
+
+const getStore = () => {
+  const epicMiddleware = createEpicMiddleware();
+  const store = createStore(
+    rootReducer,
+    composeWithDevTools(applyMiddleware(epicMiddleware))
+  );
+  epicMiddleware.run(rootEpic);
+  return store;
+};
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={getStore()}>
+      <App />
+    </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
