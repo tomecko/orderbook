@@ -1,0 +1,9 @@
+@import "../../theme.scss";
+
+.button {
+  background: $accent-color;
+  border-radius: $border-radius;
+  border: 0;
+  color: $primary-text-color;
+  padding: 0.5rem 1rem;
+}
