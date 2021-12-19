@@ -16,7 +16,7 @@
 }
 
 .headerRow {
-  order: 1;
+  order: 0;
 }
 
 .cell {
@@ -60,6 +60,10 @@
   .row {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .headerRow {
+    order: 1;
   }
 
   .bidsList {
