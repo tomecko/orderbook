@@ -1,4 +1,9 @@
 .wrapper {
   display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.spread {
   width: 100%;
 }

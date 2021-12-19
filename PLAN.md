@@ -5,6 +5,7 @@
 - [x] setting up redux store
 - [x] fetching data, add typings of client messages
 - [x] connecting redux store and components
+- [x] spread
 - [ ] error handling
 - [x] throttling ("Rerender throttling time is variable based on device performance.")
 - [ ] disconnecting when app is inactive
