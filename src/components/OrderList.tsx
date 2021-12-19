@@ -1,10 +1,12 @@
 import cns from "classnames";
-import numeral from "numeral";
 import React from "react";
 
-import { State } from "../state";
-import { Level, LevelWithTotal, Side, TotalSize } from "../types";
-import { formatGraphStop, formatPrice, formatSize } from "../shared/format";
+import { LevelWithTotal, Side, TotalSize } from "../types";
+import {
+  formatGraphStopMemoized,
+  formatPriceMemoized,
+  formatSizeMemoized,
+} from "../shared/format";
 
 import styles from "./OrderList.module.scss";
 
@@ -18,29 +20,23 @@ const COLUMNS: Column[] = [
   {
     key: "price",
     label: "Price",
-    formatFn: formatPrice,
+    formatFn: formatPriceMemoized,
   },
   {
     key: "size",
     label: "Size",
-    formatFn: formatSize,
+    formatFn: formatSizeMemoized,
   },
   {
     key: "totalSize",
     label: "Total",
-    formatFn: formatSize,
+    formatFn: formatSizeMemoized,
   },
 ];
 
-const COLUMNS_PER_SIDE: Record<
-  Side,
-  { columns: Column[]; sortFn: (a: Level, b: Level) => number }
-> = {
-  asks: { columns: COLUMNS, sortFn: (a, b) => (a.price > b.price ? 1 : -1) },
-  bids: {
-    columns: COLUMNS.slice().reverse(),
-    sortFn: (a, b) => (a.price < b.price ? 1 : -1),
-  },
+const COLUMNS_PER_SIDE: Record<Side, Column[]> = {
+  asks: COLUMNS,
+  bids: COLUMNS.slice().reverse(),
 };
 
 interface MaxTotalSizeInfo {
@@ -60,7 +56,7 @@ export function OrderList({ levels, maxTotalSizeInfo, side }: Props) {
     <table className={styles.ordersTable}>
       <thead>
         <tr>
-          {COLUMNS_PER_SIDE[side].columns.map((column) => (
+          {COLUMNS_PER_SIDE[side].map((column) => (
             <th key={column.key} className={styles.headingCell}>
               {column.label}
             </th>
@@ -93,7 +89,9 @@ interface OrderProps {
 }
 
 function Order({ level, maxTotalSizeInfo, side }: OrderProps) {
-  const graphStop = formatGraphStop(level.totalSize / maxTotalSizeInfo.max);
+  const graphStop = formatGraphStopMemoized(
+    level.totalSize / maxTotalSizeInfo.max
+  );
   const graphDirection = {
     asks: "right",
     bids: "left",
@@ -106,7 +104,7 @@ function Order({ level, maxTotalSizeInfo, side }: OrderProps) {
         background: `linear-gradient(to ${graphDirection[side]}, ${GRAPH_COLORS[side]} ${graphStop}, transparent ${graphStop} 100%)`,
       }}
     >
-      {COLUMNS_PER_SIDE[side].columns.map((column) => (
+      {COLUMNS_PER_SIDE[side].map((column) => (
         <td
           key={column.key}
           className={cns(

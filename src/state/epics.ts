@@ -8,6 +8,7 @@ import {
   map,
   mergeWith,
   switchMap,
+  take,
   tap,
 } from "rxjs/operators";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
@@ -70,11 +71,11 @@ const subscribeEpic = (
         mergeWith(
           socket.pipe(
             filter(isDeltaDTO),
-            buffer(animationFrames().pipe(filter((_, i) => i % 60 === 0))),
+            buffer(animationFrames().pipe(filter((_, i) => i % 10 === 0))),
             filter((arr) => arr.length > 0),
             // take(10),
             tap((x) => {
-              console.log(x[0].product_id, Math.floor(Date.now() / 1000));
+              console.log(78, x[0].product_id, Math.floor(Date.now() / 1000));
             }),
             map(applyDeltas)
           )
