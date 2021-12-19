@@ -6,9 +6,7 @@ import { toggleProductId } from "../state";
 
 import styles from "./ActionBar.module.scss";
 
-interface Props {}
-
-export function ActionBar({}: Props) {
+export function ActionBar() {
   const dispatch = useDispatch();
   return (
     <footer className={styles.actionBar}>

@@ -14,3 +14,6 @@
 - [x] red/green background
 - [x] RWD
 - [ ] tests
+- [ ] config
+- [ ] cleanup
+- [ ] deploy
