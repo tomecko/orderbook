@@ -2,7 +2,7 @@ import cns from "classnames";
 import React from "react";
 
 import { Price } from "../types";
-import { formatPrice, formatSpreadPercentage } from "../util/format";
+import { formatPrice, formatSpreadPercentage } from "../shared/format";
 
 import styles from "./Spread.module.scss";
 

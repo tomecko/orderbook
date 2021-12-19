@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 
-import { Action, startApp } from "../state";
+import { Action, subscribe } from "../state";
 
 import { ActionBar } from "./ActionBar";
 import { Header } from "./Header";
@@ -13,7 +13,7 @@ import "./App.css";
 const useStartApp = () => {
   const dispatch = useDispatch<Dispatch<Action>>();
   useEffect(() => {
-    dispatch(startApp());
+    dispatch(subscribe());
   }, [dispatch]);
 };
 

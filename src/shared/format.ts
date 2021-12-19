@@ -1,6 +1,6 @@
 import numeral from "numeral";
 
-import { Price, Size, TotalSize } from "./../types";
+import { Price, Size, TotalSize } from "../types";
 
 export const formatGraphStop = (ratio: number): string => {
   return numeral(ratio).format("0.00%");

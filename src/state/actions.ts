@@ -27,15 +27,23 @@ export const setSnapshot = (snapshot: SnapshotDTO): SetSnapshotAction => ({
   payload: snapshot,
 });
 
-interface StartAppAction {
-  type: "START_APP";
+interface SubscribeAction {
+  type: "SUBSCRIBE";
 }
-export const startApp = (): StartAppAction => ({
-  type: "START_APP",
+export const subscribe = (): SubscribeAction => ({
+  type: "SUBSCRIBE",
+});
+
+interface ToogleProductIdAction {
+  type: "TOGGLE_PRODUCT_ID";
+}
+export const toggleProductId = (): ToogleProductIdAction => ({
+  type: "TOGGLE_PRODUCT_ID",
 });
 
 export type Action =
   | ApplyDeltasAction
   | SetProductIdAction
   | SetSnapshotAction
-  | StartAppAction;
+  | SubscribeAction
+  | ToogleProductIdAction;

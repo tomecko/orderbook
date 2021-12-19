@@ -23,8 +23,8 @@ export function OrderLists() {
     };
   }, [asksLevels, bidsLevels]);
   const spreadInfo: SpreadInfo | null = useMemo(() => {
-    const firstBidPrice = bidsLevels[0].price;
-    const firstAskPrice = asksLevels[0].price;
+    const firstBidPrice = bidsLevels[0]?.price;
+    const firstAskPrice = asksLevels[0]?.price;
     return firstBidPrice && firstAskPrice
       ? {
           absolute: (firstAskPrice - firstBidPrice) as Price,

@@ -38,7 +38,8 @@ export const rootReducer: Reducer<State, Action> = (
         productId: action.payload,
       };
     }
-    case "START_APP":
+    case "SUBSCRIBE":
+    case "TOGGLE_PRODUCT_ID":
       return state;
     default:
       return endReducer(state, action);

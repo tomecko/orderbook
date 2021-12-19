@@ -1,4 +1,4 @@
-import { Brand } from "../util/types";
+import { Brand } from "../shared/types";
 
 export type Price = Brand<number, "price">;
 export type PriceText = Brand<string, "priceText">;

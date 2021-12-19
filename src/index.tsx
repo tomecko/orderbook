@@ -6,12 +6,12 @@ import { applyMiddleware, createStore } from "redux";
 import { createEpicMiddleware } from "redux-observable";
 
 import { App } from "./components/App";
-import { rootEpic, rootReducer } from "./state";
+import { Action, rootEpic, rootReducer, State } from "./state";
 
 import "./index.module.scss";
 
 const getStore = () => {
-  const epicMiddleware = createEpicMiddleware();
+  const epicMiddleware = createEpicMiddleware<Action, Action, State>();
   const store = createStore(
     rootReducer,
     composeWithDevTools(applyMiddleware(epicMiddleware))

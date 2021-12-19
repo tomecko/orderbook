@@ -1,7 +1,22 @@
-import React from 'react';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { toggleProductId } from "../state";
 
-export function ActionBar() {
+import styles from "./ActionBar.module.scss";
+
+interface Props {}
+
+export function ActionBar({}: Props) {
+  const dispatch = useDispatch();
   return (
-    <footer>ActionBar</footer>
+    <footer className={styles.actionBar}>
+      <button
+        onClick={() => {
+          dispatch(toggleProductId());
+        }}
+      >
+        Toggle Feed
+      </button>
+    </footer>
   );
 }

@@ -4,7 +4,7 @@ import React from "react";
 
 import { State } from "../state";
 import { Level, LevelWithTotal, Side, TotalSize } from "../types";
-import { formatGraphStop, formatPrice, formatSize } from "../util/format";
+import { formatGraphStop, formatPrice, formatSize } from "../shared/format";
 
 import styles from "./OrderList.module.scss";
 
