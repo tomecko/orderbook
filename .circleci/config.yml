@@ -8,13 +8,13 @@ jobs:
       - run: ls -larth
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "yarn.lock" }}
+          - v1-dependencies-{{ checksum "package-lock.lock" }}
           - v1-dependencies-
       - run: npm install
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-{{ checksum "package-lock.lock" }}
       - run: npm test
       - run: npm build
       - persist_to_workspace:
