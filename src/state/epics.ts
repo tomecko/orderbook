@@ -7,6 +7,7 @@ import {
   map,
   mergeWith,
   switchMap,
+  take,
   takeUntil,
   tap,
 } from "rxjs/operators";
@@ -43,8 +44,9 @@ const subscribeEpic = (action$: Observable<Action>) =>
         mergeWith(
           socket.pipe(
             filter(isDeltaDTO),
-            buffer(animationFrames().pipe(filter((_, i) => i % 10 === 0))),
+            buffer(animationFrames().pipe(filter((_, i) => i % 30 === 0))),
             filter((arr) => arr.length > 0),
+            take(10),
             tap((x) => {
               console.log(Math.floor(Date.now() / 1000));
             }),

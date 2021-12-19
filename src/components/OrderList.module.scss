@@ -1,0 +1,30 @@
+@import "../theme.scss";
+
+.ordersTable {
+  border: 0;
+  width: 50%;
+  font-family: monospace;
+  border-collapse: collapse;
+  text-align: right;
+}
+
+.headingCell {
+  color: $secondary-text-color;
+  text-transform: uppercase;
+}
+
+.levelRow {
+  background: #555 left 15%;
+}
+
+.orderValue {
+  color: $primary-text-color;
+}
+
+.asksPrice {
+  color: $asks-text-color;
+}
+
+.bidsPrice {
+  color: $bids-text-color;
+}

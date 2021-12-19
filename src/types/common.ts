@@ -1,4 +1,4 @@
-import { Brand } from "../util";
+import { Brand } from "../util/types";
 
 export type Price = Brand<number, "price">;
 export type PriceText = Brand<string, "priceText">;
@@ -10,5 +10,8 @@ export type Side = 'asks' | 'bids';
 export interface Level {
   price: Price;
   size: Size;
+}
+
+export interface LevelWithTotal extends Level {
   totalSize: TotalSize;
 }

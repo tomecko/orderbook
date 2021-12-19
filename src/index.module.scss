@@ -1,3 +1,14 @@
-td {
-  min-width: 150px;
+@import "reset-css";
+
+@import "theme.scss";
+
+html {
+  background: $background-color;
+}
+
+h1,
+button,
+p,
+span {
+  font-family: $font-family;
 }
