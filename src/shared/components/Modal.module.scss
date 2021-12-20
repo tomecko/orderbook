@@ -22,7 +22,8 @@
 
   position: fixed;
   left: 10vw;
-  top: 25vh;
+  top: 50%;
+  transform: translateY(-50%);
   height: 50vh;
   width: 80vw;
 
