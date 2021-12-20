@@ -2,42 +2,10 @@ import cns from "classnames";
 import React, { useMemo } from "react";
 
 import { LevelWithTotal, Side, TotalSize } from "../types";
-import {
-  formatGraphStopMemoized,
-  formatPriceMemoized,
-  formatSizeMemoized,
-} from "../shared/format";
+import { formatGraphStopMemoized } from "../shared/format";
+import { COLUMNS_PER_SIDE } from "./OrderList.config";
 
 import styles from "./OrderList.module.scss";
-
-interface Column {
-  key: keyof LevelWithTotal;
-  label: string;
-  formatFn: (input: any) => string;
-}
-
-const COLUMNS: Column[] = [
-  {
-    key: "price",
-    label: "Price",
-    formatFn: formatPriceMemoized,
-  },
-  {
-    key: "size",
-    label: "Size",
-    formatFn: formatSizeMemoized,
-  },
-  {
-    key: "totalSize",
-    label: "Total",
-    formatFn: formatSizeMemoized,
-  },
-];
-
-const COLUMNS_PER_SIDE: Record<Side, Column[]> = {
-  asks: COLUMNS,
-  bids: COLUMNS.slice().reverse(),
-};
 
 interface MaxTotalSizeInfo {
   asks: TotalSize;
@@ -95,7 +63,10 @@ function Order({ level, maxTotalSizeInfo, side }: OrderProps) {
   }, [level.totalSize, maxTotalSizeInfo.max]);
 
   return (
-    <li className={cns(styles.row, styles.valueRow, styles[`${side}Row`])} style={rowStyle}>
+    <li
+      className={cns(styles.row, styles.valueRow, styles[`${side}Row`])}
+      style={rowStyle}
+    >
       {COLUMNS_PER_SIDE[side].map((column) => (
         <div
           key={column.key}
