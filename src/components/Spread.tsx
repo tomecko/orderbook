@@ -23,15 +23,14 @@ export function Spread({ className, spreadInfo }: Props) {
   if (spreadInfo === null) {
     return null;
   }
+  const percentage = formatSpreadPercentageMemoized(
+    spreadInfo.absolute / spreadInfo.firstAskPrice
+  );
   return (
-    <p className={cns(className, styles.spread)}>
+    <p className={cns(className, styles.spread)} data-testid="spread">
       Spread:
       <span className={styles.figures}>
-        {formatPriceMemoized(spreadInfo.absolute)} (
-        {formatSpreadPercentageMemoized(
-          spreadInfo.absolute / spreadInfo.firstAskPrice
-        )}
-        )
+        {formatPriceMemoized(spreadInfo.absolute)} ({percentage})
       </span>
     </p>
   );

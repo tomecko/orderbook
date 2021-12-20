@@ -75,6 +75,7 @@ function Order({ level, maxTotalSizeInfo, side }: OrderProps) {
             { [styles[`${side}Price`]]: column.key === "price" },
             styles.orderValue
           )}
+          data-testid={`${side}Order-${level.price}-${column.key}`}
         >
           {column.formatFn(level[column.key])}
         </div>

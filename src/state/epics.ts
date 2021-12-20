@@ -32,108 +32,130 @@ import {
 } from "./actions";
 import { State } from "./state";
 
-let socket: WebSocketSubject<MessageDTO> | undefined;
-let onCloseSubject = new Subject();
+export interface SocketControllerInterface {
+  socket: Subject<MessageDTO> | undefined;
+  onCloseSubject: Subject<any>;
+  createSocket: () => Subject<MessageDTO>;
+}
 
-const createSocket = (): WebSocketSubject<MessageDTO> => {
-  onCloseSubject = new Subject();
-  socket = webSocket<MessageDTO>({
-    url: WEBSOCKET_URL,
-    closeObserver: onCloseSubject,
-  });
-  return socket;
-};
+class SocketController {
+  socket: WebSocketSubject<MessageDTO> | undefined;
+  onCloseSubject = new Subject<any>();
+
+  constructor() {
+    this.createSocket.bind(this);
+  }
+
+  createSocket() {
+    this.onCloseSubject = new Subject();
+    this.socket = webSocket<MessageDTO>({
+      url: WEBSOCKET_URL,
+      closeObserver: this.onCloseSubject,
+    });
+    return this.socket;
+  }
+}
 
 const ANIMATION_FRAMES_INTERVAL = 10;
 const ERROR_RESUBSCRIBING_DELAY = 1000;
-const subscribeEpic = (
-  action$: Observable<Action>,
-  state$: StateObservable<State>
-): Observable<Action> =>
-  action$.pipe(
-    ofType("SUBSCRIBE"),
-    switchMap(() => {
-      socket?.complete();
-      socket = createSocket();
-      socket.next({
-        event: "subscribe",
-        feed: "book_ui_1",
-        product_ids: [state$.value.productId],
-      });
-      return socket.pipe(
-        // Snapshot
-        filter(isSnapshotDTO),
-        map(setSnapshot),
-        // Delta
-        mergeWith(
-          socket.pipe(
-            filter(isDeltaDTO),
-            buffer(
-              animationFrames().pipe(
-                filter((_, i) => i % ANIMATION_FRAMES_INTERVAL === 0)
-              )
-            ),
-            filter((arr) => arr.length > 0),
-            map(applyDeltas),
-            takeUntil(action$.pipe(ofType("UNSUBSCRIBE")))
+const subscribeEpic =
+  (socketController: SocketControllerInterface) =>
+  (
+    action$: Observable<Action>,
+    state$: StateObservable<State>
+  ): Observable<Action> =>
+    action$.pipe(
+      ofType("SUBSCRIBE"),
+      switchMap(() => {
+        socketController.socket?.complete();
+        const socket = socketController.createSocket();
+        socket.next({
+          event: "subscribe",
+          feed: "book_ui_1",
+          product_ids: [state$.value.productId],
+        });
+        return socket.pipe(
+          // Snapshot
+          filter(isSnapshotDTO),
+          map(setSnapshot),
+          // Delta
+          mergeWith(
+            socket.pipe(
+              filter(isDeltaDTO),
+              buffer(
+                animationFrames().pipe(
+                  filter((_, i) => i % ANIMATION_FRAMES_INTERVAL === 0)
+                )
+              ),
+              filter((arr) => arr.length > 0),
+              map(applyDeltas),
+              takeUntil(action$.pipe(ofType("UNSUBSCRIBE")))
+            )
+          ),
+          filter(() => !state$.value.deactivated),
+          // resubscribing on error
+          mergeWith(
+            socket.pipe(
+              ignoreElements(),
+              catchError(() => of(subscribe())),
+              delay(ERROR_RESUBSCRIBING_DELAY) // let's delay to avoid nasty error->resubscribing loop
+            )
           )
-        ),
-        filter(() => !state$.value.deactivated),
-        // resubscribing on error
-        mergeWith(
-          socket.pipe(
-            ignoreElements(),
-            catchError(() => of(subscribe())),
-            delay(ERROR_RESUBSCRIBING_DELAY) // let's delay to avoid nasty error->resubscribing loop
+        );
+      })
+    );
+
+const unsubscribeEpic =
+  (socketController: SocketControllerInterface) =>
+  (
+    action$: Observable<Action>,
+    state$: StateObservable<State>
+  ): Observable<Action> =>
+    action$.pipe(
+      ofType("UNSUBSCRIBE"),
+      tap(() => {
+        socketController.socket?.next({
+          event: "unsubscribe",
+          feed: "book_ui_1",
+          product_ids: [state$.value.productId],
+        });
+
+        // FIXME: make sure "unsubscribe" message is sent in a reliable way
+        setTimeout(() => {
+          socketController.socket?.complete();
+        }, 100);
+      }),
+      ignoreElements()
+    );
+
+const toggleProductIdEpic =
+  (socketController: SocketControllerInterface) =>
+  (
+    action$: Observable<Action>,
+    state$: StateObservable<State>
+  ): Observable<Action> =>
+    action$.pipe(
+      ofType("TOGGLE_PRODUCT_ID"),
+      mergeMap(() =>
+        of(
+          unsubscribe(),
+          setProductId(
+            (() => {
+              return (
+                {
+                  PI_ETHUSD: "PI_XBTUSD",
+                  PI_XBTUSD: "PI_ETHUSD",
+                } as any
+              )[state$.value.productId];
+            })()
+          )
+        ).pipe(
+          mergeWith(
+            socketController.onCloseSubject.pipe(map(() => subscribe()))
           )
         )
-      );
-    })
-  );
-
-const unsubscribeEpic = (
-  action$: Observable<Action>,
-  state$: StateObservable<State>
-): Observable<Action> =>
-  action$.pipe(
-    ofType("UNSUBSCRIBE"),
-    tap(() => {
-      socket?.next({
-        event: "unsubscribe",
-        feed: "book_ui_1",
-        product_ids: [state$.value.productId],
-      });
-
-      // FIXME
-      setTimeout(() => {
-        socket?.complete();
-      }, 100);
-    }),
-    ignoreElements()
-  );
-
-const toggleProductIdEpic = (
-  action$: Observable<Action>,
-  state$: StateObservable<State>
-): Observable<Action> =>
-  action$.pipe(
-    ofType("TOGGLE_PRODUCT_ID"),
-    mergeMap(() =>
-      of(
-        unsubscribe(),
-        setProductId(
-          (() => {
-            return (
-              {
-                PI_ETHUSD: "PI_XBTUSD",
-                PI_XBTUSD: "PI_ETHUSD",
-              } as any
-            )[state$.value.productId];
-          })()
-        )
-      ).pipe(mergeWith(onCloseSubject.pipe(map(() => subscribe()))))
-    )
-  );
+      )
+    );
 
 const visibilityEpic = (action$: Observable<Action>): Observable<Action> =>
   action$.pipe(
@@ -156,9 +178,12 @@ const visibilityEpic = (action$: Observable<Action>): Observable<Action> =>
     )
   );
 
-export const rootEpic = combineEpics(
-  subscribeEpic,
-  toggleProductIdEpic,
-  unsubscribeEpic,
-  visibilityEpic
-);
+export const getRootEpic = (
+  socketController: SocketControllerInterface = new SocketController()
+) =>
+  combineEpics(
+    subscribeEpic(socketController),
+    toggleProductIdEpic(socketController),
+    unsubscribeEpic(socketController),
+    visibilityEpic
+  );
