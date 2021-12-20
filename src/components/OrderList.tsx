@@ -7,7 +7,7 @@ import { COLUMNS_PER_SIDE } from "./OrderList.config";
 
 import styles from "./OrderList.module.scss";
 
-interface MaxTotalSizeInfo {
+export interface MaxTotalSizeInfo {
   asks: TotalSize;
   bids: TotalSize;
   max: TotalSize;

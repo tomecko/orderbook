@@ -9,8 +9,6 @@ import { Header } from "./Header";
 import { OrderLists } from "./OrderLists";
 import { ReconnectModal } from "./ReconnectModal";
 
-import "./App.css";
-
 const useStartApp = () => {
   const dispatch = useDispatch<Dispatch<Action>>();
   useEffect(() => {

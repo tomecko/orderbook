@@ -1,6 +1,5 @@
-import { LevelWithTotal, Side, TotalSize } from "../types";
+import { LevelWithTotal, Side } from "../types";
 import {
-  formatGraphStopMemoized,
   formatPriceMemoized,
   formatSizeMemoized,
 } from "../shared/format";

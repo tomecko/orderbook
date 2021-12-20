@@ -7,6 +7,7 @@ import { getRootEpic, SocketControllerInterface } from "./epics";
 import { rootReducer } from "./reducers";
 import { State } from "./state";
 
+// `socketController` argument passed in tests, see `App.test.tsx`
 export const getStore = (socketController?: SocketControllerInterface) => {
   const epicMiddleware = createEpicMiddleware<Action, Action, State>();
   const store = createStore(

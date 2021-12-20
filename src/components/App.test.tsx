@@ -51,6 +51,8 @@ class MockSocketController {
   }
 }
 
+// TODO: add more tests: error handling, check order of items, reconnection feature
+
 test("should correctly display snapshot data", async () => {
   // Given
   const mockFn = jest.fn((socket: Subject<MessageDTO> | undefined) => {

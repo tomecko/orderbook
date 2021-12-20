@@ -19,6 +19,7 @@
   width: 100%;
 }
 
+// TODO: move it to some config
 @media (max-width: 600px), screen and (orientation: portrait) {
   .wrapper {
     flex-direction: column;

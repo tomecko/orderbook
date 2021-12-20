@@ -1,3 +1,4 @@
+import { DEFAULT_PRODUCT_ID } from "../config";
 import { Level, PriceText, ProductId } from "./../types";
 
 export type OneSideOrders = Record<PriceText, Level>;
@@ -19,5 +20,5 @@ export const INITIAL_STATE: State = {
     asks: {},
     bids: {},
   },
-  productId: "PI_XBTUSD",
+  productId: DEFAULT_PRODUCT_ID,
 };

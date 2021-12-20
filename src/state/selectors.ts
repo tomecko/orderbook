@@ -8,6 +8,7 @@ const SORT_FN_PER_SIDE: Record<Side, (a: Level, b: Level) => number> = {
   bids: (a, b) => (a.price < b.price ? 1 : -1),
 };
 
+// TODO: add UT
 export const selectLevels =
   (side: Side) =>
   (store: State): LevelWithTotal[] =>
