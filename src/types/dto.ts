@@ -17,16 +17,20 @@ export interface SnapshotDTO {
   product_id: ProductId;
 }
 
-// export interface SubscribedEventDTO {
-//   event: "subscribed";
-//   feed: "book_ui_1";
-//   product_ids: ProductId[];
-// }
-
 export interface ClientSubscribeMessageDTO {
   event: "subscribe";
   feed: "book_ui_1";
   product_ids: ProductId[];
 }
 
-export type MessageDTO = ClientSubscribeMessageDTO | DeltaDTO | SnapshotDTO;
+export interface ClientUnsubscribeMessageDTO {
+  event: "unsubscribe";
+  feed: "book_ui_1";
+  product_ids: ProductId[];
+}
+
+export type MessageDTO =
+  | ClientSubscribeMessageDTO
+  | ClientUnsubscribeMessageDTO
+  | DeltaDTO
+  | SnapshotDTO;

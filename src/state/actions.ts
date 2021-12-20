@@ -48,10 +48,19 @@ export const toggleProductId = (): ToogleProductIdAction => ({
   type: "TOGGLE_PRODUCT_ID",
 });
 
+interface UnsubscribeAction {
+  type: "UNSUBSCRIBE";
+}
+export const unsubscribe = (): UnsubscribeAction => ({
+  type: "UNSUBSCRIBE",
+});
+
+
 export type Action =
   | ApplyDeltasAction
   | DeactivateAppAction
   | SetProductIdAction
   | SetSnapshotAction
   | SubscribeAction
-  | ToogleProductIdAction;
+  | ToogleProductIdAction
+  | UnsubscribeAction;

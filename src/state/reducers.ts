@@ -40,7 +40,7 @@ export const rootReducer: Reducer<State, Action> = (
         return state;
       }
       return {
-        ...INITIAL_STATE,
+        ...state,
         productId: action.payload,
       };
     }
@@ -48,6 +48,11 @@ export const rootReducer: Reducer<State, Action> = (
       return {
         ...state,
         deactivated: false,
+      };
+    case "UNSUBSCRIBE":
+      return {
+        ...state,
+        orders: INITIAL_STATE["orders"],
       };
     case "TOGGLE_PRODUCT_ID":
       return state;
