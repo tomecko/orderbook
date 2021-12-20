@@ -1,3 +1,4 @@
+import { ORDER_LIMIT } from "../config";
 import { State } from "../state";
 
 import { Level, LevelWithTotal, Side, TotalSize } from "../types";
@@ -12,7 +13,7 @@ export const selectLevels =
   (store: State): LevelWithTotal[] =>
     Object.values<Level>(store.orders[side])
       .sort(SORT_FN_PER_SIDE[side])
-      .slice(0, 15)
+      .slice(0, ORDER_LIMIT)
       .reduce(
         (acc, curr) => {
           const totalSize = (acc.totalSize +
