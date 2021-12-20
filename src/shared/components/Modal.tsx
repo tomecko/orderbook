@@ -8,8 +8,9 @@ interface Props {
 
 export function Modal({ children }: Props) {
   return (
-    <div className={styles.modal}>
-      {children}
-    </div>
+    <>
+      <div className={styles.overlay}></div>
+      <div className={styles.modal}>{children}</div>
+    </>
   );
 }

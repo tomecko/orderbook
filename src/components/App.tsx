@@ -25,7 +25,7 @@ export function App() {
     <>
       <Header />
       <OrderLists />
-      <ActionBar />
+      {!deactivated && <ActionBar />}
       {deactivated ? <ReconnectModal /> : null}
     </>
   );

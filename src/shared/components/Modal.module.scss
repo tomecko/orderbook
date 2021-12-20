@@ -1,5 +1,18 @@
 @import "../../theme.scss";
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background-color: $background-color;
+  opacity: 0.5;
+}
+
 .modal {
   background: $background-color;
   border: 1px solid $border-color;
@@ -8,8 +21,8 @@
 
   position: fixed;
   left: 10vw;
-  top: 10vh;
-  height: 80vh;
+  top: 25vh;
+  height: 50vh;
   width: 80vw;
 
   display: flex;
