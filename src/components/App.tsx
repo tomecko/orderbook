@@ -23,6 +23,7 @@ export function App() {
     <>
       <Header />
       <OrderLists />
+      {/* TODO re ActionBar: Do not show it until the app subscribes to new feed */}
       {!deactivated && <ActionBar />}
       {deactivated ? <ReconnectModal /> : null}
     </>

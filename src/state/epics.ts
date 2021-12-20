@@ -121,6 +121,7 @@ const unsubscribeEpic =
         });
 
         // FIXME: make sure "unsubscribe" message is sent in a reliable way
+        // Consider relying on "unsubscribed" event sent back by server
         setTimeout(() => {
           socketController.socket?.complete();
         }, 100);
