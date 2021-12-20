@@ -17,6 +17,7 @@ import {
 } from "rxjs/operators";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 
+import { WEBSOCKET_URL } from "../config";
 import { isDeltaDTO, isSnapshotDTO } from "../services";
 import { MessageDTO } from "../types";
 
@@ -31,7 +32,6 @@ import {
 } from "./actions";
 import { State } from "./state";
 
-const WEBSOCKET_URL = "wss://www.cryptofacilities.com/ws/v1";
 let socket: WebSocketSubject<MessageDTO> | undefined;
 let onCloseSubject = new Subject();
 
@@ -45,6 +45,7 @@ const createSocket = (): WebSocketSubject<MessageDTO> => {
 };
 
 const ANIMATION_FRAMES_INTERVAL = 10;
+const ERROR_RESUBSCRIBING_DELAY = 1000;
 const subscribeEpic = (
   action$: Observable<Action>,
   state$: StateObservable<State>
@@ -83,7 +84,7 @@ const subscribeEpic = (
           socket.pipe(
             ignoreElements(),
             catchError(() => of(subscribe())),
-            delay(1000) // let's delay to avoid nasty error->resubscribing loop
+            delay(ERROR_RESUBSCRIBING_DELAY) // let's delay to avoid nasty error->resubscribing loop
           )
         )
       );
